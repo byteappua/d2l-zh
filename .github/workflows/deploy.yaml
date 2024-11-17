@@ -127,16 +127,16 @@ jobs:
           job-type: ci-cpu
           job-name: D2L-Builder
           command: chmod +x ./.github/workflow_scripts/build_and_deploy_github.sh ./.github/workflow_scripts/build_html.sh && ./.github/workflow_scripts/build_and_deploy_github.sh "${{ env.REPO_NAME }}" "${{ env.TARGET_BRANCH }}" "${{ env.JOB_NAME }}" "${{ env.LANG }}" "${{ env.CACHE_DIR }}"
-      - name: Terminate Batch Job on Cancellation
-        if: ${{ cancelled() && env.Batch_JobID }}
-        run: |
-          echo "Terminating Submitted AWS Batch Job: "${{ env.Batch_JobID }}""
-          aws batch terminate-job --job-id "${{ env.Batch_JobID }}" --reason "Job terminated by cancelled workflow"
-      - name: Comment on PR
-        if: ${{ github.event_name == 'pull_request_target' }}
-        uses: peter-evans/create-or-update-comment@38e799a33166c9a254f2e3660d4d49ecd67eb80c # v3
-        with:
-          issue-number: ${{ github.event.number }}
-          body: |
-            Job PR-${{ github.event.number }}-${{ env.SHORT_SHA }} is done.
-            Check the results at http://preview.d2l.ai/${{ env.JOB_NAME }}
+      # - name: Terminate Batch Job on Cancellation
+      #   if: ${{ cancelled() && env.Batch_JobID }}
+      #   run: |
+      #     echo "Terminating Submitted AWS Batch Job: "${{ env.Batch_JobID }}""
+      #     aws batch terminate-job --job-id "${{ env.Batch_JobID }}" --reason "Job terminated by cancelled workflow"
+      # - name: Comment on PR
+      #   if: ${{ github.event_name == 'pull_request_target' }}
+      #   uses: peter-evans/create-or-update-comment@38e799a33166c9a254f2e3660d4d49ecd67eb80c # v3
+      #   with:
+      #     issue-number: ${{ github.event.number }}
+      #     body: |
+      #       Job PR-${{ github.event.number }}-${{ env.SHORT_SHA }} is done.
+      #       Check the results at http://preview.d2l.ai/${{ env.JOB_NAME }}
